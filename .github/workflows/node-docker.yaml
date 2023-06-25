@@ -1,4 +1,4 @@
-name: CI
+name: CI - main
 
 on:
   workflow_call:
@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
 
     - name: Extract version
       id: extract_version
