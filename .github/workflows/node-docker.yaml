@@ -11,9 +11,11 @@ jobs:
     steps:
 
     - name: Extract version
-      id: extract_version
       run: |
-        echo "version=(jq -r .version package.json)" >> $GITHUB_OUTPUT
+        echo "IMAGE_VERSION=(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+    - name: Lowercase repository name
+      run: echo "REPO_NAME=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_OUTPUT
 
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v1
@@ -22,10 +24,6 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Lowercase repository name
-      id: repo_name
-      run: echo "repo=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_OUTPUT
-
     - name: Build and publish Docker image
       uses: docker/build-push-action@v2
       with:
@@ -33,5 +31,5 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          ghcr.io/${{ steps.repo_name.outputs.repo }}:${{ steps.extract_version.outputs.version }}
-          ghcr.io/${{ steps.repo_name.outputs.repo }}:latest
+          ghcr.io/$REPO_NAME:$IMAGE_VERSION
+          ghcr.io/$REPO_NAME:latest
