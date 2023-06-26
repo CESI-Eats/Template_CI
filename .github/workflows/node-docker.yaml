@@ -15,7 +15,7 @@ jobs:
 
     - name: Extract version
       run: |
-        echo "IMAGE_VERSION=(jq -r .version package.json)" >> $GITHUB_ENV
+        echo "IMAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
     - name: Lowercase repository name
       run: echo "REPO_NAME=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_ENV
