@@ -12,10 +12,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Extract version
-      run: |
-        echo "IMAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
-
     - name: Lowercase repository name
       run: echo "REPO_NAME=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_ENV
 
@@ -33,5 +29,5 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          ghcr.io/${{ env.REPO_NAME }}:dev-${{ env.IMAGE_VERSION }}
+          ghcr.io/${{ env.REPO_NAME }}:dev-${{ inputs.version }}
           ghcr.io/${{ env.REPO_NAME }}:dev-latest
