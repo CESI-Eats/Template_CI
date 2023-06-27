@@ -39,4 +39,4 @@ jobs:
         push: true
         tags: |
           ghcr.io/${{ needs.pre-build.outputs.IMAGE_NAME }}:dev-${{ inputs.version }}
-          ghcr.io/${{ needs.pre-build.outputs.IMAGE_NAME }}:latest
+          ghcr.io/${{ needs.pre-build.outputs.IMAGE_NAME }}:dev-latest
