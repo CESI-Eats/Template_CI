@@ -11,9 +11,10 @@ jobs:
   pre-build:
     runs-on: ubuntu-latest
     outputs:
-      IMAGE_NAME: ${{ steps.extract-version.outputs.IMAGE_NAME }}
+      IMAGE_NAME: ${{ steps.extract-image-name.outputs.IMAGE_NAME }}
     steps:
     - name: Lowercase repository name
+      id: extract-image-name
       run: echo "IMAGE_NAME=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_OUTPUT
 
   build:
