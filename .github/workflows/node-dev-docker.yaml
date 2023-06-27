@@ -8,16 +8,20 @@ on:
         type: string
 
 jobs:
-  build:
-
+  pre-build:
     runs-on: ubuntu-latest
+    outputs:
+      IMAGE_NAME: ${{ steps.extract-version.outputs.IMAGE_NAME }}
     steps:
+    - name: Lowercase repository name
+      run: echo "IMAGE_NAME=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_OUTPUTS
 
+  build:
+    runs-on: ubuntu-latest
+    needs: pre-build
+    steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Lowercase repository name
-      run: echo "REPO_NAME=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_ENV
 
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v1
@@ -33,5 +37,5 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          ghcr.io/${{ env.REPO_NAME }}:dev-${{ inputs.version }}
-          ghcr.io/${{ env.REPO_NAME }}:dev-latest
+          ghcr.io/${{ needs.pre-build.outputs.IMAGE_NAME }}:dev-${{ inputs.version }}
+          ghcr.io/${{ needs.pre-build.outputs.IMAGE_NAME }}:latest
