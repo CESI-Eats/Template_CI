@@ -2,6 +2,10 @@ name: CI - main
 
 on:
   workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
 
 jobs:
   build:
